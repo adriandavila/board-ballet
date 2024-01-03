@@ -6,43 +6,43 @@
 # Variables
 ############################################
 
-export REPO_ROOT="$(cd ${SCRIPT_DIR} && git rev-parse --show-superproject-working-tree --show-toplevel | head -1)"
+export REPO_ROOT="$(git rev-parse --show-superproject-working-tree --show-toplevel | head -1)"
 
-export BUILD_DIR="${ORTOA_SHARED}/build"
-export INSTALL_DIR="${ORTOA_SHARED}/install"
+export BUILD_DIR="${REPO_ROOT}/build"
+export INSTALL_DIR="${REPO_ROOT}/install"
 
 ############################################
 # Help
 ############################################
 
-ortoa-help() {
+boba-help() {
     cat <<'_EOF_'
 --------------------------------------------------------------------
 board-ballet-lib: a collection of bash functions to ease development
 --------------------------------------------------------------------
 
     Building and Installing:
-        bob-configure: ------------ Configure C++ projects
-        bob-build: ---------------- Build C++ projects
-        bob-install: -------------- Install C++ projects
-        bob-cbi: ------------------ Configure, build & install C++ projects
-        bob-clean: ---------------- Cleanup C++ build and install directories
+        boba-configure: ------------ Configure C++ projects
+        boba-build: ---------------- Build C++ projects
+        boba-install: -------------- Install C++ projects
+        boba-cbi: ------------------ Configure, build & install C++ projects
+        boba-clean: ---------------- Cleanup C++ build and install directories
 
 Happy developing!
 _EOF_
 
-    [[ ${#} -eq 0 ]]
+    return 0
 }
 
 ############################################
 # Building and Installing
 ############################################
 
-bob-configure() {
+boba-configure() {
     local HELP="""\
 Run cmake configuration stage for C++ projects
 
-Syntax: bob-configure [-h] [cmake-parameters]
+Syntax: boba-configure [-h] [cmake-parameters]
 -----------------------------------------------
     h                   Prints this help message
     cmake-parameters    Parameters passed to CMake configure invocation
@@ -66,11 +66,11 @@ Syntax: bob-configure [-h] [cmake-parameters]
           "${@}"
 }
 
-bob-build() {
+boba-build() {
     local HELP="""\
-Build C++ projects (requires bob-configure)
+Build C++ projects (requires boba-configure)
 
-Syntax: bob-build [-h] [cmake-parameters]
+Syntax: boba-build [-h] [cmake-parameters]
 -------------------------------------------
     h                   Prints this help message
     cmake-parameters    Parameters passed to CMake invocation
@@ -87,11 +87,11 @@ Syntax: bob-build [-h] [cmake-parameters]
     cmake --build "${BUILD_DIR}" "${@}"
 }
 
-bob-install() {
+boba-install() {
     local HELP="""\
-Install C++ projects (requires bob-build)
+Install C++ projects (requires boba-build)
 
-Syntax: bob-install [-h] [cmake-parameters]
+Syntax: boba-install [-h] [cmake-parameters]
 ---------------------------------------------
     h                   Prints this help message
     cmake-parameters    Parameters passed to CMake invocation
@@ -108,12 +108,12 @@ Syntax: bob-install [-h] [cmake-parameters]
     cmake --install "${BUILD_DIR}" --prefix "${INSTALL_DIR}" "${@}"
 }
 
-bob-cbi() {
+boba-cbi() {
     local HELP="""\
 Run cmake configure, build and install stages for C++ projects
 Must be run from the repo root
 
-Syntax: bob-cbi [-h] [cmake-parameters]
+Syntax: boba-cbi [-h] [cmake-parameters]
 -----------------------------------------
     h                   Prints this help message
     cmake-parameters    Parameters passed to CMake configure invocation
@@ -127,16 +127,16 @@ Syntax: bob-cbi [-h] [cmake-parameters]
 
     cd "${REPO_ROOT}"
 
-    bob-configure "${@}"
-    bob-build
-    bob-install
+    boba-configure "${@}"
+    boba-build
+    boba-install
 }
 
-bob-clean() {
+boba-clean() {
     local HELP="""\
 Clean build and install directories
 
-Syntax: bob-clean [-h]
+Syntax: boba-clean [-h]
 ------------------------
     h                   Prints this help message
 """
